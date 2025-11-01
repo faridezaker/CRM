@@ -10,4 +10,10 @@ class LeadService
     {
 
     }
+
+    public function index()
+    {
+        $lead = $this->leadRepository->index();
+
+    }
 }
