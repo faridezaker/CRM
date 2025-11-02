@@ -10,15 +10,11 @@ class Lead extends Model
     use HasFactory;
 
     protected $table = 'leads';
-    protected $fillable = ["contact_id", "pipeline_id", "assigned_to", "status"];
+    protected $fillable = ["contact_id", "pipeline_id", "assigned_to","pipeline" ,"status"];
 
     public function contact()
     {
         return $this->belongsTo(Contact::class);
-    }
-    public function pipeline()
-    {
-        return $this->belongsTo(Pipeline::class);
     }
 
     public function salesPerson() {

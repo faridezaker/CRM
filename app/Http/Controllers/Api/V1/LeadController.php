@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LeadResource;
 use App\Services\LeadService;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,11 @@ class LeadController extends Controller
     public function index()
     {
         $data = $this->leadService->index();
+
+        return response()->json([
+            'lead' => LeadResource::collection($data),
+            'message' => 'Return of leads related to sales person successfully',
+        ], 201);
     }
 
     /**

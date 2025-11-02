@@ -14,13 +14,12 @@ return new class extends Migration
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
             $table->foreignId('contact_id')->constrained()->onDelete('cascade');
-            $table->foreignId('pipeline_id')->constrained()->onDelete('cascade');
             $table->foreignId('assigned_to')->nullable()->constrained('sales_person');
+            $table->enum('pipeline',['Registered','Purchased','Expired','Follow up'])->default('Registered');
             $table->enum('status', ['active', 'archived'])->default('active');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

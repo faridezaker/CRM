@@ -13,8 +13,4 @@ class Contact extends Model
 
     protected $fillable = ["name","email","mobile","address"];
 
-    public function leads() {
-        return $this->hasMany(Lead::class,'contact_id');
-    }
-
 }

@@ -21,8 +21,8 @@ class LeadFactory extends Factory
     {
         return [
             'contact_id' => Contact::inRandomOrder()->first()?->id,
-            'pipeline_id' => Pipeline::inRandomOrder()->first()?->id,
             'assigned_to' => SalesPerson::inRandomOrder()->first()?->id,
+            'pipeline'=>$this->faker->randomElement(['Registered','Purchased','Expired','Follow up']),
             'status' => $this->faker->randomElement(['active', 'archived']),
         ];
     }

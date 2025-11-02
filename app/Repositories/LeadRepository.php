@@ -4,11 +4,13 @@ namespace App\Repositories;
 
 use App\Models\Lead;
 use App\Repositories\Interfaces\LeadRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class LeadRepository implements LeadRepositoryInterface
 {
     public function index()
     {
-        return Lead::with('contact', 'salesPerson', 'pipeline')->paginate(10);
+        $sales_person = auth()->user();
+        return Lead::with('contact')->where('assigned_to', $sales_person->id)->paginate(10);
     }
 }

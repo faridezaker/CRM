@@ -13,7 +13,6 @@ class LeadService
 
     public function index()
     {
-        $lead = $this->leadRepository->index();
-
+        return $this->leadRepository->index();
     }
 }

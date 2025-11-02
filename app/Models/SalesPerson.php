@@ -11,10 +11,15 @@ class SalesPerson extends Model
 
     protected $table = 'sales_person';
 
-    protected $fillable = ["name","marketing_code"];
+    protected $fillable = ["user_id","marketing_code"];
 
     public function leads()
     {
         return $this->hasMany(Lead::class,'sales_person_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
     }
 }
