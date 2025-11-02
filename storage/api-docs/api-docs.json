@@ -217,6 +217,101 @@
                     }
                 }
             }
+        },
+        "/api/v1/leads": {
+            "get": {
+                "tags": [
+                    "Leads"
+                ],
+                "summary": "Get list of leads assigned to the authenticated sales person",
+                "description": "Retrieve a list of leads related to the currently authenticated sales person.",
+                "operationId": "d660caaedd473f1082c49dca5634bb53",
+                "responses": {
+                    "200": {
+                        "description": "List of leads retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Return of leads related to sales person successfully"
+                                        },
+                                        "lead": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 17
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "active"
+                                                    },
+                                                    "pipeline": {
+                                                        "type": "string",
+                                                        "example": "Registered"
+                                                    },
+                                                    "contact": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 6
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Verna Dibbert"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "fay.hanna@example.net"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "sales_person": {
+                                                        "type": "string",
+                                                        "example": "Foster Ferry"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-11-02 10:44:51"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -232,6 +327,10 @@
         {
             "name": "Auth",
             "description": "Auth"
+        },
+        {
+            "name": "Leads",
+            "description": "Leads"
         }
     ]
 }

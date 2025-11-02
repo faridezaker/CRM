@@ -12,4 +12,9 @@ class SalesPersonRepository implements SalesPersonRepositoryInterface
         return SalesPerson::create($data);
     }
 
+    public function MarcetingCode(int $marketing_code)
+    {
+        return SalesPerson::where('marketing_code', $marketing_code)->first();
+    }
+
 }
