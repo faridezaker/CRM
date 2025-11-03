@@ -6,5 +6,8 @@ interface SalesPersonRepositoryInterface {
 
     public function Create(array $data);
 
-    public function MarcetingCode(int $marketing_code);
+    public function MarketingCode(string $marketing_code);
+
+    public function allActive();
+
 }

@@ -22,8 +22,9 @@ class CheckContact extends FormRequest
     public function rules(): array
     {
         return [
-            'contact_id' => 'required|exists:contacts,id',
-            'marketing_code' => 'nullable|exists:sales_person,marketing_code',
+            'leads'=>'required|array',
+            'leads.*.contact_id' => 'required|exists:contacts,id',
+            'leads.*.marketing_code' => 'nullable|exists:sales_person,marketing_code',
         ];
     }
 }

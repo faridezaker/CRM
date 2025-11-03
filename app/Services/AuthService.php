@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Repositories\Interfaces\SalesPersonRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Exception;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -18,25 +19,28 @@ class AuthService
 
     public function register(array $data)
     {
-       try {
+        try {
             $data['password'] = bcrypt($data['password']);
+
+            DB::beginTransaction();
 
             $user = $this->userRepository->register($data);
 
-            if (! empty($data['marketing_code'])) {
-                $this->salesPersonRepository->Create([
-                    'user_id' => $user->id,
-                    'marketing_code' => $data['marketing_code']
-                ]);
-            }
+            $this->salesPersonRepository->create([
+                'user_id' => $user->id,
+                'marketing_code' => random_int(100000, 999999),
+            ]);
+
+            DB::commit();
 
             return [
                 'status' => true,
                 'user' => new UserResource($user),
                 'message' => 'User registered successfully',
             ];
-
         } catch (Exception $e) {
+            DB::rollBack();
+
             return [
                 'status' => false,
                 'message' => 'Registration failed. Please try again later.',

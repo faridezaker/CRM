@@ -39,10 +39,6 @@
                                     "password_confirmation": {
                                         "type": "string",
                                         "example": "password123"
-                                    },
-                                    "marketing_code": {
-                                        "type": "integer",
-                                        "example": "45466456"
                                     }
                                 },
                                 "type": "object"
@@ -311,6 +307,149 @@
                         "bearerAuth": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "Leads"
+                ],
+                "summary": "Create new leads",
+                "description": "Create new leads for contacts with optional marketing code",
+                "operationId": "816520615fff48e26eb49ca76b38a78c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "leads"
+                                ],
+                                "properties": {
+                                    "leads": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "contact_id": {
+                                                    "description": "ID of the contact",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "marketing_code": {
+                                                    "description": "Marketing code of the sales person (optional)",
+                                                    "type": "string",
+                                                    "example": "ABC123"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "example": [
+                                            {
+                                                "contact_id": 1,
+                                                "marketing_code": "ABC123"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Lead created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lead created successfully"
+                                        },
+                                        "lead": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 17
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "active"
+                                                },
+                                                "pipeline": {
+                                                    "type": "string",
+                                                    "example": "Registered"
+                                                },
+                                                "contact": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "John Doe"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "john@example.com"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-11-03 10:44:51"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request - validation failed or business logic error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Contact already has a lead"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The leads.0.contact_id field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },

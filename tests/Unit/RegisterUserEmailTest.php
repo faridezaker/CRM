@@ -15,7 +15,6 @@ class RegisterUserEmailTest extends TestCase
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8|confirmed',
-            'marketing_code'=>'nullable|integer',
         ];
     }
 
@@ -30,7 +29,6 @@ class RegisterUserEmailTest extends TestCase
     /** @test */
     public function email_must_be_present_and_valid()
     {
-        // داده با ایمیل نامعتبر
         $data = [
             'name' => 'Test User',
             'email' => 'invalid-email',
@@ -47,7 +45,6 @@ class RegisterUserEmailTest extends TestCase
     /** @test */
     public function email_is_required()
     {
-        // داده بدون ایمیل
         $data = [
             'name' => 'Test User',
             'password' => 'password123',

@@ -3,7 +3,7 @@
 namespace App\Repositories\Interfaces;
 
 interface LeadRepositoryInterface {
-    public function index();
+    public function index(int $userId);
 
     public function findContact(int $contact_id);
 
@@ -11,5 +11,5 @@ interface LeadRepositoryInterface {
 
     public function updateStatus(int $contact_id, string $status);
 
-    public function countSalesPersonWithStatusActive();
+    public function allActive();
 }

@@ -62,7 +62,8 @@ class LeadController extends Controller
 
     public function index()
     {
-        $data = $this->leadService->index();
+        $userId = auth()->user()->id;
+        $data = $this->leadService->index($userId);
 
         return response()->json([
             'lead' => LeadResource::collection($data),
@@ -71,11 +72,72 @@ class LeadController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/v1/leads",
+     *     tags={"Leads"},
+     *     summary="Create new leads",
+     *     description="Create new leads for contacts with optional marketing code",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"leads"},
+     *             @OA\Property(
+     *                 property="leads",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="contact_id", type="integer", example=1, description="ID of the contact"),
+     *                     @OA\Property(property="marketing_code", type="string", example="4481820", description="Marketing code of the sales person (optional)")
+     *                 ),
+     *                 example={{
+     *                     "contact_id": 1,
+     *                     "marketing_code": "ABC123"
+     *                 }}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Lead created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Lead created successfully"),
+     *             @OA\Property(
+     *                 property="lead",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=17),
+     *                 @OA\Property(property="status", type="string", example="active"),
+     *                 @OA\Property(property="pipeline", type="string", example="Registered"),
+     *                 @OA\Property(
+     *                     property="contact",
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="name", type="string", example="John Doe"),
+     *                     @OA\Property(property="email", type="string", example="john@example.com")
+     *                 ),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-11-03 10:44:51")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request - validation failed or business logic error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Contact already has a lead")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The leads.0.contact_id field is required."),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     )
+     * )
      */
     public function store(CheckContact $request)
     {
-        $result = $this->leadService->createLeadForContact($request->validated());
+        $result = $this->leadService->createLeadForContacts($request->validated());
 
         if (! $result['status']) {
             return response()->json([
@@ -85,7 +147,7 @@ class LeadController extends Controller
         }
 
         return response()->json([
-            'lead' => new LeadResource($result['lead']),
+            'leads' =>  LeadResource::collection($result['leads']),
             'message' => $result['message'],
         ], 201);
 

@@ -23,7 +23,6 @@ class LeadResource extends JsonResource
                 'name' => $this->contact->name ?? null,
                 'email' => $this->contact->email ?? null,
             ],
-            'sales_person' => $this->salesPerson->user->name ?? null,
             'created_at' => $this->created_at->toDateTimeString(),
         ];
 

@@ -8,15 +8,14 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class LeadRepository implements LeadRepositoryInterface
 {
-    public function index()
+    public function index(int $userId)
     {
-        $sales_person = auth()->user();
-        return Lead::with('contact')->where('assigned_to', $sales_person->id)->paginate(10);
+        return Lead::with('contact')->where('assigned_to', $userId)->paginate(10);
     }
 
     public function findContact($contact_id)
     {
-        return Lead::findOrFail($contact_id);
+        return Lead::where('contact_id', $contact_id)->first();
     }
 
     public function store(array $data)
@@ -26,12 +25,12 @@ class LeadRepository implements LeadRepositoryInterface
 
     public function updateStatus(int $contact_id, string $status)
     {
-        return Lead::where('contact_id', $contact_id)->update(['status' => $status]);
+        return Lead::where('contact_id',$contact_id)->update(['status' => $status]);
     }
 
-    public function countSalesPersonWithStatusActive()
+    public function allActive()
     {
-        //return Lead::with('status','active')->co
+        return Lead::where('status', 'active')->get();
     }
 
 
