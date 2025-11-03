@@ -32,7 +32,8 @@ class LeadService
             if ($salesPeople->isEmpty()) {
                 return [
                     'status' => false,
-                    'message'=> 'No sales persons available'
+                    'message'=> 'No sales persons available',
+                    'code'=> 400
                 ];
             }
 

@@ -336,7 +336,7 @@
                                                 "marketing_code": {
                                                     "description": "Marketing code of the sales person (optional)",
                                                     "type": "string",
-                                                    "example": "ABC123"
+                                                    "example": "4481820"
                                                 }
                                             },
                                             "type": "object"
@@ -344,7 +344,7 @@
                                         "example": [
                                             {
                                                 "contact_id": 1,
-                                                "marketing_code": "ABC123"
+                                                "marketing_code": "4481820"
                                             }
                                         ]
                                     }

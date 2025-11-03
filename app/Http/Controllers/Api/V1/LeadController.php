@@ -90,7 +90,7 @@ class LeadController extends Controller
      *                 ),
      *                 example={{
      *                     "contact_id": 1,
-     *                     "marketing_code": "ABC123"
+     *                     "marketing_code": "4481820"
      *                 }}
      *             )
      *         )

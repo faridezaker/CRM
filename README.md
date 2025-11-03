@@ -1,59 +1,72 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🧩 CRM Lead Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is a **CRM-style Lead Management API**, built with **Laravel 12**, designed to handle user registration, contact management, and automated lead assignment through marketing codes or a fair (round-robin) distribution system.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This system manages customers (**Contacts**) and salespeople (**SalesPersons**) in a structured way.  
+When a new customer registers or performs an action, a **Lead** is created and assigned to a salesperson based on one of two rules:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. If a **marketing code** is provided, the lead is assigned to that salesperson.
+2. Otherwise, it’s assigned **fairly using a round-robin algorithm**, ensuring balanced workloads.
 
-## Learning Laravel
+In addition, a **background job** runs every 24 hours to:
+- Check for customers who registered but made no purchase,
+- Archive their previous leads,
+- And create a new follow-up lead automatically in the `follow_up_24h` pipeline.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ⚙️ Tech Stack
 
-## Laravel Sponsors
+- **Language:** PHP 8.2+
+- **Framework:** Laravel 12
+- **Database:** MySQL
+- **Cache/Queue:** Redis
+- **Documentation:** Swagger (L5-Swagger)
+- **Containerization:** Docker + Docker Compose
+- **Testing:** PHPUnit + Laravel Test Suite
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🏗️ Architecture Overview
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+The project uses the **Repository-Service pattern** for clean separation between business logic and data persistence:
 
-## Contributing
+- `Repositories` handle database interactions.
+- `Services` manage application logic.
+- `Jobs` handle background tasks such as lead follow-up checks.
+- `Requests` handle validation for incoming data.
+- `Resources` format API responses.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Key modules include:
+- **AuthService** → Handles user registration and JWT authentication.
+- **LeadService** → Manages lead creation, marketing code validation, and round-robin assignment.
+- **Jobs/CheckFollowUpLeads** → Archives and recreates leads after 24 hours of inactivity.
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🐳 Run with Docker
 
-## Security Vulnerabilities
+### To Run:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+# Build and start containers
+docker compose up -d --build
 
-## License
+# Install dependencies and set up Laravel
+docker compose exec app composer install
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate
+docker compose exec app php artisan jwt:secret
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Stop containers
+docker compose down
+
+# Run artisan commands
+docker compose exec app php artisan <command>
+
+# Start Docker containers
+docker compose up -d --build

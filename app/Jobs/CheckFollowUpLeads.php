@@ -7,6 +7,7 @@ use App\Models\Lead;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 
 class CheckFollowUpLeads implements ShouldQueue
 {
@@ -30,7 +31,7 @@ class CheckFollowUpLeads implements ShouldQueue
         foreach ($contacts as $contact) {
             $activeLead = Lead::where('contact_id', $contact->id)->where('status', 'active')->first();
 
-            if ($activeLead && $activeLead->pipeline === 'registered') {
+            if ($activeLead && $activeLead->pipeline === 'Registered') {
 
                 $activeLead->update(['status' => 'archived']);
 
