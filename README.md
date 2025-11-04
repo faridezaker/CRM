@@ -68,5 +68,16 @@ docker compose down
 # Run artisan commands
 docker compose exec app php artisan <command>
 
-# Start Docker containers
-docker compose up -d --build
+# Generate Swagger docs
+docker compose exec app php artisan l5-swagger:generate
+
+# View Swagger UI at:
+# http://localhost:8000/api/documentation
+
+Run the Tests:
+
+# Run all tests
+docker compose exec app php artisan test
+
+Your application will be available at http://localhost:8000 once the containers are running.
+```
